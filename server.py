@@ -68,5 +68,6 @@ if CHOICE in CHOICES:
         FILE.writelines(json.dumps(RESULTS, sort_keys=True, indent=4))
         FILE.close()
 
+        print(RESULTS['nmap'])
     if CHOICE == 3:
         sys.exit(1)
