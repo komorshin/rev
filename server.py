@@ -7,13 +7,21 @@ import urllib3
 import subprocess
 import nmap
 import json
+import argparse
 
 from time import sleep
 from colorama import Fore, Style
 
-HOST = '10.68.2.184'
+PARSER = argparse.ArgumentParser()
+
+PARSER.add_argument('Host', type = str, metavar = 'H')
+
+_ARGS = PARSER.parse_args()
+
+HOST = _ARGS.Host
 PORT = 2230
 BUFF_SIZE = 1024 * 128
+CONNECTIONS = []
 CHOICES = {
     1: 'Connect',
     2: 'Scan host for vulnerabilities',
@@ -29,8 +37,16 @@ print(f'[?] Listening for connections as {HOST}')
 
 connection, addr = socket.accept()
 print(f'[!] Connection recieved from {addr[0]} running on port {addr[1]}')
+sleep(2)
 
-print(Fore.GREEN + Style.BRIGHT + "------------------------------------------\n")
+os.system('clear')
+
+CONNECTIONS.append(addr[0])
+CONS_LIST = CONNECTIONS[:][0]
+
+print(Fore.GREEN + Style.BRIGHT + "<------------------------------------------>")
+print(f'Current Connections: {[CONS_LIST[:]]}\n')
+
 for ch in CHOICES:
     print(f'{ch}: {CHOICES[ch]}')
 
@@ -62,12 +78,12 @@ if CHOICE in CHOICES:
     if CHOICE == 2:
         res = nmap.PortScanner()
         RESULTS = res.scan(HOST, str(PORT), 'sV')
+
         RESULTS = str(RESULTS)
 
         FILE = open('output.json', 'w+')
         FILE.writelines(json.dumps(RESULTS, sort_keys=True, indent=4))
         FILE.close()
 
-        print(RESULTS['nmap'])
     if CHOICE == 3:
         sys.exit(1)
