@@ -5,11 +5,18 @@ import ipaddress
 import requests
 import urllib3
 import subprocess
+import argparse
 
 from colorama import Fore, Style
 from time import sleep
 
-HOST = '10.68.2.184'
+PARSER = argparse.ArgumentParser()
+
+PARSER.add_argument('Host', type = str, metavar = 'H')
+
+_ARGS = PARSER.parse_args()
+
+HOST = _ARGS.Host
 PORT = 2230
 BUFF_SIZE = 1024 * 128
 
@@ -17,6 +24,7 @@ socket = socket.socket()
 
 socket.connect((HOST, PORT))
 
+# possible make like a fake screen or sum shit lmao
 print(Fore.GREEN + Style.BRIGHT + f"Connected to {HOST}!")
 
 currentwd = os.getcwd()
